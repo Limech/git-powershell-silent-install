@@ -1,5 +1,14 @@
 Param([string]$versionToInstall="2.7.0.2")
 
+If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+{   
+  $arguments = "& '" + $myinvocation.mycommand.definition + "'"
+  Start-Process "$psHome\powershell.exe" -Verb runAs -ArgumentList $arguments
+  break
+}
+
+Set-Location $PSScriptRoot
+
 ## This script will always uninstall existing versions before installing
 ## even if the version to be installed is already installed.
 

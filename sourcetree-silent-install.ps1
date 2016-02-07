@@ -1,6 +1,14 @@
 Param([string]$versionToInstall="1.7.0.32509")
 #Param([string]$versionToInstall="1.6.25")
 
+If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+{   
+  $arguments = "& '" + $myinvocation.mycommand.definition + "'"
+  Start-Process "$psHome\powershell.exe" -Verb runAs -ArgumentList $arguments
+  break
+}
+
+Set-Location $PSScriptRoot
 
 ## Install Git if not already installed
 $gitInstalledPath = 'C:\Program Files\Git\bin\git.exe'

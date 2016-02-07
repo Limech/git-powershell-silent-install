@@ -1,4 +1,13 @@
-﻿## There can be many places where git could have been installed.  Check likely places.
+﻿If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+{   
+  $arguments = "& '" + $myinvocation.mycommand.definition + "'"
+  Start-Process "$psHome\powershell.exe" -Verb runAs -ArgumentList $arguments
+  break
+}
+
+Set-Location $PSScriptRoot
+
+## There can be many places where git could have been installed.  Check likely places.
 ### List of likely places where Git could be 
 $possibleInstalledPaths = @("C:\Program Files\Git\", "C:\Program Files (x64)\Git\", "c:\git\")
 
