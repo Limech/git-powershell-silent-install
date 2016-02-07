@@ -1,25 +1,25 @@
+Param([string]$versionToInstall="2.7.0.2")
 
 $timestamp = Get-Date -format yyMMdd-HHmmss
-$installer = "C:\dev\github\limech\git-powershell-silent-install\Git-2.7.0.2-64-bit.exe"
-$commandLineOptions = "/SP- /VERYSILENT /SUPPRESSMSGBOXES /FORCECLOSEAPPLICATIONS /LOADINF='install-defaults.txt'"
 
-$uninstaller ="C:\Program Files (x86)\Git\unins000.exe"
-$uninstallerCommandLineOptions = "/SP- /VERYSILENT /SUPPRESSMSGBOXES /FORCECLOSEAPPLICATIONS"
-
-if (Test-Path $uninstaller)
+### Check for already installed instances of Git and uninstall those found.
+$gitUninstallScript = Resolve-Path ".\git-silent-uninstall.ps1"
+if (Test-Path $gitUninstallScript)
 {
-    Start-Process -Wait -FilePath $uninstaller -ArgumentList $uninstallerCommandLineOptions
+       &"$gitUninstallScript"
 }
+  
+## Install Git
+$installerFilename = ".\Git-" + $versionToInstall + "-64-bit.exe"
+$installer = Resolve-Path $installerFilename
+Write-Host "Running installer " $installer
+$optionsFile = Resolve-Path ".\install-defaults.txt"
+Write-Host "with options file " $optionsFile
 
-$uninstaller ="C:\Program Files\Git\unins000.exe"
-
-if (Test-Path $uninstaller)
-{
-    Start-Process -Wait -FilePath $uninstaller -ArgumentList $uninstallerCommandLineOptions
-}
+$commandLineOptions = "/SP- /VERYSILENT /SUPPRESSMSGBOXES /FORCECLOSEAPPLICATIONS /LOADINF='"+ $optionsFile + "'"
+Write-Host $commandLineOptions
 
 Start-Process -Wait -FilePath $installer -ArgumentList $commandLineOptions
-
 
 ## Configure git with some defaults
 ### Set git as a command alias
@@ -31,3 +31,5 @@ if (!(Test-Path -Path "alias:git"))
 git config --global credential.helper wincred
 git config --global push.default simple
 git config --global core.autocrlf true
+
+Write-Host "Git installer done."
