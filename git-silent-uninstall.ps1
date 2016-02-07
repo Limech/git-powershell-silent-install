@@ -1,5 +1,4 @@
-﻿
-## There can be many places where git could have been installed.  Check likely places.
+﻿## There can be many places where git could have been installed.  Check likely places.
 ### List of likely places where Git could be 
 $possibleInstalledPaths = @("C:\Program Files\Git\", "C:\Program Files (x64)\Git\", "c:\git\")
 
@@ -11,6 +10,11 @@ foreach ($installPath in $possibleInstalledPaths)
     ### If the path where Git could be exists
     if (Test-Path($installPath))
     {
+
+        ## Some Git stuff might be running.. kill them.
+        Stop-Process -processname Bash -erroraction 'silentlycontinue'
+        Stop-Process -processname Putty* -erroraction 'silentlycontinue'
+
         $foundAnInstallation = $true
         Write-Host "Removing Git from " $installPath
 
