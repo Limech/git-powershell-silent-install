@@ -18,4 +18,4 @@ A UAC prompt to elevate priviledges will come up, select `Yes`.
 ### Notes
 * Must have admin rights to install.
 * The SourceTree install script will install Git if not already installed. It will not check if Git is at the desired version however.  If you want to upgrade Git, use the `git-silent-install.ps1` file in a similar fashion.
-
+* If you are running into trouble running the script, it could be due to the computer's permissions blocking PowerShell scripts from running. Disable this restriction by opening up a PowerShell console in administrator mode and typing `Set-ExecutionPolicy Unrestricted`.
